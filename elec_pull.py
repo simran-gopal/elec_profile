@@ -1,5 +1,6 @@
 # import warnings
 # warnings.filterwarnings("ignore")
+! pip install geopy
 import pandas as pd
 # import numpy as np
 import streamlit as st
