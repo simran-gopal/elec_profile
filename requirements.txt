@@ -14,3 +14,4 @@ psycopg2-binary==2.9.6
 plotly>=5
 boto3==1.29.0
 botocore==1.32.0
+reverse_geocoder==1.5.1
