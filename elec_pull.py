@@ -82,12 +82,7 @@ mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
                                    database=config['mynzo_db_read']['database'], 
                                    connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
 
-@st.cache
-def get_data(mynzo_db_read):
-    geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id, holiday_details from geo', mynzo_db_read)
-    return geo_table
-
-geo_table=get_data(mynzo_db_read)
+geo_table = pd.read_sql_query('select id, code, parent_id from geo', mynzo_db_read)
 
 # Streamlit app
 st.title('Electric Profile Generator')
