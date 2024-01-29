@@ -92,7 +92,6 @@ if len(a)>2:
   a=a.split(',')
   lat = float(a[0])
   lon=float(a[1])
-  
   # Generate table based on user input
   if st.button('Generate Table'):
       geo_id=geo_id_finder(lat, lon, geo_table)
@@ -119,12 +118,7 @@ if len(a)>2:
           test['hour'] = test.elec_ls.apply(lambda x:x[3])
           test['elec_value'] = test.elec_ls.apply(lambda x:x[4])
           test['gas_value'] = test.gas_ls.apply(lambda x:x[4])
-          display=test[[ 'geo_id', 'electricity_factor',
-                 'electricity_indus_per_cap', 'electricity_comm_per_cap',
-                 'electricity_resi_per_cap', 'gas_indus_per_cap', 'gas_comm_per_cap',
-                 'gas_resi_per_cap', 'building_type', 'month',
-                 'day', 'hour', 'elec_value', 'gas_value']]
-          
+          display=test[[ 'geo_id', 'electricity_factor','electricity_indus_per_cap', 'electricity_comm_per_cap','electricity_resi_per_cap', 'gas_indus_per_cap', 'gas_comm_per_cap','gas_resi_per_cap', 'building_type', 'month','day', 'hour', 'elec_value', 'gas_value']]
           # Display the generated table
           st.write('Generated Table:')
           # st.write(display)
@@ -136,7 +130,7 @@ if len(a)>2:
               data=csv_data,
               file_name='generated_table.csv',
               key='download_button'
-        else:
+      else:
           st.write('There is no data for this lat long')
       
       )
