@@ -130,9 +130,10 @@ if len(a)>2:
               data=csv_data,
               file_name='generated_table.csv',
               key='download_button'
+      )
         else:
             st.write('There is no data for this lat long')
         # else:
         #     st.write('There is no data for this lat long')
       
-      )
+
