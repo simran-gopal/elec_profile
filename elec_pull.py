@@ -1,7 +1,8 @@
 import subprocess
 import sys
 import os
-
+import warnings
+warnings.filterwarnings('ignore')
 # Check if requirements.txt exists
 if os.path.exists('requirements.txt'):
 #     # Install dependencies from requirements.txt
