@@ -95,7 +95,7 @@ if len(a)>2:
   # Generate table based on user input
     if st.button('Generate Table'):
         geo_id=geo_id_finder(lat, lon, geo_table)
-        if type(geo_id)=='int':
+        if type(geo_id)==int:
             data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
             lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
             lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
@@ -119,18 +119,9 @@ if len(a)>2:
             test['elec_value'] = test.elec_ls.apply(lambda x:x[4])
             test['gas_value'] = test.gas_ls.apply(lambda x:x[4])
             display=test[[ 'geo_id', 'electricity_factor','electricity_indus_per_cap', 'electricity_comm_per_cap','electricity_resi_per_cap', 'gas_indus_per_cap', 'gas_comm_per_cap','gas_resi_per_cap', 'building_type', 'month','day', 'hour', 'elec_value', 'gas_value']]
-            # Display the generated table
             st.write('Generated Table:')
-            # st.write(display)
-
-            # Add a download button for the generated table
             csv_data = display.to_csv(index=False)
-            st.download_button(
-              label="Download Table as CSV",
-              data=csv_data,
-              file_name='generated_table.csv',
-              key='download_button'
-      )
+            st.download_button(label="Download Table as CSV",data=csv_data,file_name='generated_table.csv',key='download_button')
         else:
             st.write('There is no data for this lat long')
         # else:
