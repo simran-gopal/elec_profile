@@ -104,9 +104,7 @@ if len(a)>2:
           from  lib_electric_consumption lec
           inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id 
           where lec.geo_id in ({geo_id});''', mynzo_db_read)
-      
           mynzo_db_read.close()
-  
           test = flatten_dict(data_df.electric_config[0])
           data_df['elec_ls'] =  data_df.electric_config.apply(lambda x: flatten_dict(x))
           data_df['gas_ls'] =  data_df.gas_config.apply(lambda x: flatten_dict(x))
@@ -138,7 +136,7 @@ if len(a)>2:
               data=csv_data,
               file_name='generated_table.csv',
               key='download_button'
-      else:
+        else:
           st.write('There is no data for this lat long')
       
       )
