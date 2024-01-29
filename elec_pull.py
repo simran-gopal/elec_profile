@@ -10,43 +10,14 @@ if os.path.exists('requirements.txt'):
     # except subprocess.CalledProcessError:
     #     print("Error installing dependencies from requirements.txt")
 
-# import warnings
-# warnings.filterwarnings("ignore")
 import pandas as pd
-# import numpy as np
 import streamlit as st
-# import sshtunnel
-# import paramiko
-# from paramiko import SSHClient
-# from sshtunnel import SSHTunnelForwarder
-# import traceback
 import pandas.io.sql as sqlio
-# import psycopg2
 import json
 import geopy.distance
 import mysql.connector
-# from geopy.geocoders import Nominatim
-# from statistics import mode
-# import cv2
-# import urllib
-# import requests
-# from PIL import ImageColor
-# import traceback
-# import h3
-# from timezonefinder import TimezoneFinder
-# from io import StringIO
-# from itertools import chain
-# from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode
-# import boto3
-# import time
 import configparser
 import reverse_geocoder as rg
-# import time
-# import re
-# import datetime
-# from datetime import datetime, date, timedelta
-# import pymysql
-
 
 config = configparser.ConfigParser()
 
@@ -124,50 +95,50 @@ if len(a)>2:
   
   # Generate table based on user input
   if st.button('Generate Table'):
-      # Create a DataFrame based on user input
-      # data = {'Value 1': [value1], 'Value 2': [value2]}
-      # df = pd.DataFrame(data)
       geo_id=geo_id_finder(lat, lon, geo_table)
-  
-      data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
-      lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
-      lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
-      lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config 
-      from  lib_electric_consumption lec
-      inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id 
-      where lec.geo_id in ({geo_id});''', mynzo_db_read)
-  
-      mynzo_db_read.close()
-  
-      test = flatten_dict(data_df.electric_config[0])
-      data_df['elec_ls'] =  data_df.electric_config.apply(lambda x: flatten_dict(x))
-      data_df['gas_ls'] =  data_df.gas_config.apply(lambda x: flatten_dict(x))
-      test = data_df.explode('elec_ls')
-      test2 = data_df.explode('gas_ls')
-      test2.drop(['electric_config', 'gas_config','elec_ls'], axis=1, inplace=True)
-      test.drop(['electric_config', 'gas_config','gas_ls'], axis=1, inplace=True)
-      test['gas_ls'] = test2.gas_ls
-      test['building_type'] = test.elec_ls.apply(lambda x:x[0])
-      test['month'] = test.elec_ls.apply(lambda x:x[1])
-      test['day'] = test.elec_ls.apply(lambda x:x[2])
-      test['hour'] = test.elec_ls.apply(lambda x:x[3])
-      test['elec_value'] = test.elec_ls.apply(lambda x:x[4])
-      test['gas_value'] = test.gas_ls.apply(lambda x:x[4])
-      display=test[[ 'geo_id', 'electricity_factor',
-             'electricity_indus_per_cap', 'electricity_comm_per_cap',
-             'electricity_resi_per_cap', 'gas_indus_per_cap', 'gas_comm_per_cap',
-             'gas_resi_per_cap', 'building_type', 'month',
-             'day', 'hour', 'elec_value', 'gas_value']]
+      if type(geo_id)=='int':
+          data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
+          lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
+          lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
+          lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config 
+          from  lib_electric_consumption lec
+          inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id 
+          where lec.geo_id in ({geo_id});''', mynzo_db_read)
       
-      # Display the generated table
-      st.write('Generated Table:')
-      # st.write(display)
+          mynzo_db_read.close()
+  
+          test = flatten_dict(data_df.electric_config[0])
+          data_df['elec_ls'] =  data_df.electric_config.apply(lambda x: flatten_dict(x))
+          data_df['gas_ls'] =  data_df.gas_config.apply(lambda x: flatten_dict(x))
+          test = data_df.explode('elec_ls')
+          test2 = data_df.explode('gas_ls')
+          test2.drop(['electric_config', 'gas_config','elec_ls'], axis=1, inplace=True)
+          test.drop(['electric_config', 'gas_config','gas_ls'], axis=1, inplace=True)
+          test['gas_ls'] = test2.gas_ls
+          test['building_type'] = test.elec_ls.apply(lambda x:x[0])
+          test['month'] = test.elec_ls.apply(lambda x:x[1])
+          test['day'] = test.elec_ls.apply(lambda x:x[2])
+          test['hour'] = test.elec_ls.apply(lambda x:x[3])
+          test['elec_value'] = test.elec_ls.apply(lambda x:x[4])
+          test['gas_value'] = test.gas_ls.apply(lambda x:x[4])
+          display=test[[ 'geo_id', 'electricity_factor',
+                 'electricity_indus_per_cap', 'electricity_comm_per_cap',
+                 'electricity_resi_per_cap', 'gas_indus_per_cap', 'gas_comm_per_cap',
+                 'gas_resi_per_cap', 'building_type', 'month',
+                 'day', 'hour', 'elec_value', 'gas_value']]
+          
+          # Display the generated table
+          st.write('Generated Table:')
+          # st.write(display)
       
-      # Add a download button for the generated table
-      csv_data = display.to_csv(index=False)
-      st.download_button(
-          label="Download Table as CSV",
-          data=csv_data,
-          file_name='generated_table.csv',
-          key='download_button'
+          # Add a download button for the generated table
+          csv_data = display.to_csv(index=False)
+          st.download_button(
+              label="Download Table as CSV",
+              data=csv_data,
+              file_name='generated_table.csv',
+              key='download_button'
+      else:
+          st.write('There is no data for this lat long')
+      
       )
