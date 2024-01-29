@@ -97,13 +97,7 @@ if len(a)>2:
     if st.button('Generate Table'):
         geo_id=geo_id_finder(lat, lon, geo_table)
         # if type(geo_id)==int:
-        data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
-        lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
-        lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
-        lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config 
-        from  lib_electric_consumption lec
-        inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id 
-        where lec.geo_id in ({geo_id});''', mynzo_db_read)
+        data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config from  lib_electric_consumption lecinner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id where lec.geo_id in ({geo_id});''', mynzo_db_read)
         mynzo_db_read.close()
         test = flatten_dict(data_df.electric_config[0])
         data_df['elec_ls'] =  data_df.electric_config.apply(lambda x: flatten_dict(x))
