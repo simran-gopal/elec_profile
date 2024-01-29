@@ -76,13 +76,18 @@ def flatten_dict(row_dict):
                  for level4, value in inner3.items()]
     return flat_ls
 
-mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
+@st.cache
+def get_data(config):
+    mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
                                    user=config['mynzo_db_read']['user'],
                                    password=config['mynzo_db_read']['password'],
                                    database=config['mynzo_db_read']['database'], 
                                    connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
+    geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id, holiday_details from geo', mynzo_db_read)
+    return geo_table
 
-geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id, holiday_details from geo', mynzo_db_read)
+geo_table=get_data(config)
+
 # Streamlit app
 st.title('Electric Profile Generator')
 
@@ -96,6 +101,7 @@ if len(a)>2:
     if st.button('Generate Table'):
         geo_id=geo_id_finder(lat, lon, geo_table)
         if type(geo_id)==int:
+            @st.cache
             data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
             lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
             lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
