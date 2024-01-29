@@ -101,7 +101,6 @@ if len(a)>2:
     if st.button('Generate Table'):
         geo_id=geo_id_finder(lat, lon, geo_table)
         if type(geo_id)==int:
-            @st.cache
             data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  
             lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, 
             lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, 
