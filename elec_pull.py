@@ -97,7 +97,7 @@ if len(a)>2:
   # Generate table based on user input
     if st.button('Generate Table'):
         geo_id=geo_id_finder(lat, lon, geo_table)
-        # if type(geo_id)==int:
+        if type(geo_id)==int:
         data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config from  lib_electric_consumption lec inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id where lec.geo_id in ({geo_id});''', mynzo_db_read)
         mynzo_db_read.close()
         test = flatten_dict(data_df.electric_config[0])
@@ -118,8 +118,8 @@ if len(a)>2:
         st.write('Generated Table:')
         csv_data = display.to_csv(index=False)
         st.download_button(label="Download Table as CSV",data=csv_data,file_name='generated_table.csv',key='download_button')
-    else:
-        st.write('There is no data for this lat long')
+        else:
+            st.write('There is no data for this lat long')
         # else:
         #     st.write('There is no data for this lat long')
       
