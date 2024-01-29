@@ -3,10 +3,10 @@ import sys
 import os
 
 # Check if requirements.txt exists
-# if os.path.exists('requirements.txt'):
-# #     # Install dependencies from requirements.txt
-# #     try:
-#     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+if os.path.exists('requirements.txt'):
+#     # Install dependencies from requirements.txt
+#     try:
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
     # except subprocess.CalledProcessError:
     #     print("Error installing dependencies from requirements.txt")
 
