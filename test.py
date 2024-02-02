@@ -21,10 +21,10 @@ mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
                                    database=config['mynzo_db_read']['database'], 
                                    connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
 
-# Fetch only necessary columns
-data_df = pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read, columns=['occupation', 'email'])
+# Fetch all columns initially
+data_df = pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
 
-st.title('Electric Profile Generator')
+st.title('Occupation from email')
 
 @st.cache_data(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
 def load_data():
