@@ -25,21 +25,17 @@ mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
                                    database=config['mynzo_db_read']['database'], 
                                    connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
 
-geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id from geo', mynzo_db_read)
-
 st.title('Electric Profile Generator')
 
 a = st.text_input("Enter the Email:")
 if len(a) > 2:
-    if st.button('Generate Table'):
-        data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email like '%{a}%';''', mynzo_db_read)
-        mynzo_db_read.close()
+    data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email like '%{a}%';''', mynzo_db_read)
+    mynzo_db_read.close()
 
-        if not data_df.empty:
-            st.write("Generated Table:")
-            st.write(data_df)
-        else:
-            st.write('There is no data for this Email')
+    if not data_df.empty:
+        st.write("Generated Table:")
+        st.write(data_df)
+    else:
+        st.write('There is no data for this Email')
 else:
     st.write('Please enter a valid Email')
-
