@@ -41,7 +41,7 @@ a= st.text_input("Enter the Email:")
 if len(a)>2:
   # Generate table based on user input
     if st.button('Generate Table'):
-        data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email='%{a}%';''', mynzo_db_read)
+        data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email like '%{a}%';''', mynzo_db_read)
         mynzo_db_read.close()
         test.write('Generated Table:')
         csv_data = display.to_csv(index=False)
