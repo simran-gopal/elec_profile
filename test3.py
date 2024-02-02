@@ -28,7 +28,7 @@ st.title('Occupation from email')
 
 @st.cache_data(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
 def load_data():
-    return data_df
+    return pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
 
 
 data_df=load_data()
