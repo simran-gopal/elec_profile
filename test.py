@@ -3,13 +3,9 @@ import sys
 import os
 import warnings
 warnings.filterwarnings('ignore')
-# Check if requirements.txt exists
+
 if os.path.exists('requirements.txt'):
-#     # Install dependencies from requirements.txt
-#     try:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
-    # except subprocess.CalledProcessError:
-    #     print("Error installing dependencies from requirements.txt")
 
 import pandas as pd
 import streamlit as st
@@ -21,8 +17,6 @@ import configparser
 import reverse_geocoder as rg
 
 config = configparser.ConfigParser()
-
-# config.read(r"C:\Users\simra\Downloads\python_scripts\cred_aws.txt")
 config.read(r"mynzo_staging_config.ini")
 
 mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
@@ -33,20 +27,23 @@ mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
 
 geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id from geo', mynzo_db_read)
 
-# Streamlit app
 st.title('Electric Profile Generator')
 
-# User input
-a= st.text_input("Enter the Email:")
-if len(a)>2:
-  # Generate table based on user input
+@st.cache
+def load_data():
+    return pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
+
+data_df = load_data()
+
+a = st.text_input("Enter the Email:")
+if len(a) > 2:
     if st.button('Generate Table'):
-        data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email like '%{a}%';''', mynzo_db_read)
+        occupation = data_df[data_df['email'].str.contains(a, case=False)]['occupation']
         mynzo_db_read.close()
-        csv_data = data_df.to_csv(index=False)
-        st.download_button(label="Download Table as CSV",data=csv_data,file_name='generated_table.csv',key='download_button')
-    else:
-        st.write('There is no data for this Email')
-    # else:
-    #     st.write('There is no data for this lat long')
-      
+
+        if not occupation.empty:
+            st.write(f"Occupation for {a}: {occupation.iloc[0]}")
+        else:
+            st.write(f'There is no data for the email {a}')
+else:
+    st.write('Please enter a valid Email')
