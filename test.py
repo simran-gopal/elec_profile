@@ -9,12 +9,8 @@ if os.path.exists('requirements.txt'):
 
 import pandas as pd
 import streamlit as st
-import pandas.io.sql as sqlio
-import json
-import geopy.distance
 import mysql.connector
 import configparser
-import reverse_geocoder as rg
 
 config = configparser.ConfigParser()
 config.read(r"mynzo_staging_config.ini")
@@ -25,15 +21,14 @@ mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
                                    database=config['mynzo_db_read']['database'], 
                                    connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
 
-geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id from geo', mynzo_db_read)
+# Fetch only necessary columns
+data_df = pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read, columns=['occupation', 'email'])
 
 st.title('Electric Profile Generator')
 
 @st.cache_data(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
 def load_data():
-    return pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
-
-data_df = load_data()
+    return data_df
 
 a = st.text_input("Enter the Email:")
 if len(a) > 2:
