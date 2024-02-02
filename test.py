@@ -29,7 +29,7 @@ geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id f
 
 st.title('Electric Profile Generator')
 
-@st.cache(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
+@st.cache_data(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
 def load_data():
     return pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
 
@@ -38,13 +38,13 @@ data_df = load_data()
 a = st.text_input("Enter the Email:")
 if len(a) > 2:
     if st.button('Generate Table'):
-        occupation = data_df[data_df['email'].str.contains(a, case=False)]['occupation']
-        mynzo_db_read.close()
-
-        if not occupation.empty:
-            st.write(f"Occupation for {a}: {occupation.iloc[0]}")
+        # Check for NaN values before filtering
+        filtered_data = data_df[data_df['email'].str.contains(a, case=False, na=False)]
+        
+        if not filtered_data.empty:
+            occupation = filtered_data['occupation'].iloc[0]
+            st.write(f"Occupation for {a}: {occupation}")
         else:
             st.write(f'There is no data for the email {a}')
 else:
     st.write('Please enter a valid Email')
-
