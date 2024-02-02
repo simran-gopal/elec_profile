@@ -43,7 +43,6 @@ if len(a)>2:
     if st.button('Generate Table'):
         data_df = pd.read_sql_query(f'''select occupation from user_setting us left join user u on us.user_id=u.id where email like '%{a}%';''', mynzo_db_read)
         mynzo_db_read.close()
-        test.write('Generated Table:')
         csv_data = data_df.to_csv(index=False)
         st.download_button(label="Download Table as CSV",data=csv_data,file_name='generated_table.csv',key='download_button')
     else:
