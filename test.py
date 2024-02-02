@@ -29,7 +29,7 @@ geo_table = pd.read_sql_query('select id, code, latitude, longitude, parent_id f
 
 st.title('Electric Profile Generator')
 
-@st.cache
+@st.cache(hash_funcs={mysql.connector.connection_cext.CMySQLConnection: lambda x: None})
 def load_data():
     return pd.read_sql_query('select occupation, email from user_setting us left join user u on us.user_id=u.id;', mynzo_db_read)
 
@@ -47,3 +47,4 @@ if len(a) > 2:
             st.write(f'There is no data for the email {a}')
 else:
     st.write('Please enter a valid Email')
+
