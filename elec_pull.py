@@ -2,15 +2,6 @@ import subprocess
 import sys
 import os
 import warnings
-import conda
-# import os
-
-conda_file_dir = conda.__file__
-conda_dir = conda_file_dir.split('lib')[0]
-proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
-os.environ["PROJ_LIB"] = proj_lib
-warnings.filterwarnings('ignore')
-
 # Check if requirements.txt exists
 if os.path.exists('requirements.txt'):
 #     # Install dependencies from requirements.txt
