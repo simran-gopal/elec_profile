@@ -11,12 +11,12 @@ if os.path.exists('requirements.txt'):
     # except subprocess.CalledProcessError:
     #     print("Error installing dependencies from requirements.txt")
 
-# import pandas as pd
+import pandas as pd
 import streamlit as st
-# import pandas.io.sql as sqlio
-# import json
-# import geopy.distance
-# import mysql.connector
+import pandas.io.sql as sqlio
+import json
+import geopy.distance
+import mysql.connector
 import configparser
 import reverse_geocoder as rg
 
