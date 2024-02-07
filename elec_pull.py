@@ -12,7 +12,7 @@ if os.path.exists('requirements.txt'):
     #     print("Error installing dependencies from requirements.txt")
 
 # import pandas as pd
-# import streamlit as st
+import streamlit as st
 # import pandas.io.sql as sqlio
 # import json
 # import geopy.distance
