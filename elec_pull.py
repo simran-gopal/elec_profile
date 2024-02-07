@@ -100,12 +100,12 @@ if len(a)>2:
     a=a.split(',')
     lat = float(a[0])
     lon=float(a[1])
-    geo_table=load_geo()
-    iso_alpha2_to_alpha3=load_iso()
-  # Generate table based on user input
-if st.button('Generate Table'):
     # geo_table=load_geo()
     # iso_alpha2_to_alpha3=load_iso()
+  # Generate table based on user input
+if st.button('Generate Table'):
+    geo_table=load_geo()
+    iso_alpha2_to_alpha3=load_iso()
     if isinstance(lat,float) & isinstance(lon,float):
         
         geo_id=geo_id_finder(lat, lon, geo_table)
