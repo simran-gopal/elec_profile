@@ -13,7 +13,7 @@ if os.path.exists('requirements.txt'):
 
 import pandas as pd
 import streamlit as st
-import pandas.io.sql as sqlio
+# import pandas.io.sql as sqlio
 import json
 import geopy.distance
 import mysql.connector
