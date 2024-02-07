@@ -5,15 +5,10 @@ import warnings
 warnings.filterwarnings('ignore')
 # Check if requirements.txt exists
 if os.path.exists('requirements.txt'):
-#     # Install dependencies from requirements.txt
-#     try:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
-    # except subprocess.CalledProcessError:
-    #     print("Error installing dependencies from requirements.txt")
 
 import pandas as pd
 import streamlit as st
-# import pandas.io.sql as sqlio
 import json
 import geopy.distance
 import mysql.connector
@@ -95,7 +90,6 @@ def load_geo():
                                        database=config['mynzo_db_read']['database'], 
                                        connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
     return pd.read_sql_query('select id, code, latitude, longitude, parent_id from geo', mynzo_db_read)
-# geo_table=load_geo()
 
 # Streamlit app
 st.title('Electric Profile Generator')
