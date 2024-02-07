@@ -20,6 +20,7 @@ import mysql.connector
 import configparser
 import reverse_geocoder as rg
 import geopandas as gpd
+import shapely
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
