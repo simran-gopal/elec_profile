@@ -3,13 +3,9 @@ import sys
 import os
 import warnings
 # Check if requirements.txt exists
-if os.path.exists('requirements.txt'):
-#     # Install dependencies from requirements.txt
-    # try:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
-    # except subprocess.CalledProcessError:
-    #     print("Error installing dependencies from requirements.txt")
 
+# subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    
 import pandas as pd
 import streamlit as st
 import pandas.io.sql as sqlio
