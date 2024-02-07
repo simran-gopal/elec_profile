@@ -17,7 +17,7 @@ if os.path.exists('requirements.txt'):
 # import json
 # import geopy.distance
 # import mysql.connector
-# import configparser
+import configparser
 import reverse_geocoder as rg
 
 config = configparser.ConfigParser()
