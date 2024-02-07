@@ -22,8 +22,8 @@ import reverse_geocoder as rg
 
 config = configparser.ConfigParser()
 
-config.read(r"C:\Users\simra\Downloads\python_scripts\config files\mynzo_staging_config (1).ini")
-# config.read(r"mynzo_staging_config.ini")
+# config.read(r"C:\Users\simra\Downloads\python_scripts\config files\mynzo_staging_config (1).ini")
+config.read(r"mynzo_staging_config.ini")
 
 @st.cache_data(ttl=None)
 def load_iso():
