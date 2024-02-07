@@ -5,7 +5,11 @@ import warnings
 warnings.filterwarnings('ignore')
 # Check if requirements.txt exists
 if os.path.exists('requirements.txt'):
+#     # Install dependencies from requirements.txt
+#     try:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+    # except subprocess.CalledProcessError:
+    #     print("Error installing dependencies from requirements.txt")
 
 import pandas as pd
 import streamlit as st
@@ -76,12 +80,6 @@ def flatten_dict(row_dict):
                  for level4, value in inner3.items()]
     return flat_ls
 
-mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
-                                       user=config['mynzo_db_read']['user'],
-                                       password=config['mynzo_db_read']['password'],
-                                       database=config['mynzo_db_read']['database'], 
-                                       connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
-
 @st.cache_data(ttl=None)
 def load_geo():
     mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
@@ -90,6 +88,7 @@ def load_geo():
                                        database=config['mynzo_db_read']['database'], 
                                        connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
     return pd.read_sql_query('select id, code, latitude, longitude, parent_id from geo', mynzo_db_read)
+# geo_table=load_geo()
 
 # Streamlit app
 st.title('Electric Profile Generator')
@@ -107,9 +106,13 @@ if st.button('Generate Table'):
     geo_table=load_geo()
     iso_alpha2_to_alpha3=load_iso()
     if isinstance(lat,float) & isinstance(lon,float):
-        
         geo_id=geo_id_finder(lat, lon, geo_table)
         if type(geo_id)==int:
+            mynzo_db_read = mysql.connector.connect(host=config['mynzo_db_read']['host'],
+                                       user=config['mynzo_db_read']['user'],
+                                       password=config['mynzo_db_read']['password'],
+                                       database=config['mynzo_db_read']['database'], 
+                                       connection_timeout=int(config['mynzo_db_read']['connection_timeout']))
             data_df = pd.read_sql_query(f'''select lec.geo_id, lec.electricity_factor,  lec.base_lib_electric_consumption_id, lec.electricity_indus_per_cap, lec.electricity_comm_per_cap, lec.electricity_resi_per_cap, lec.gas_indus_per_cap, lec.gas_comm_per_cap, lec.gas_resi_per_cap, blec.electric_config, blec.gas_config from  lib_electric_consumption lec inner join base_lib_electric_consumption blec on lec.base_lib_electric_consumption_id = blec.id where lec.geo_id in ({geo_id});''', mynzo_db_read)
             mynzo_db_read.close()
             test = flatten_dict(data_df.electric_config[0])
