@@ -32,13 +32,14 @@ iso_alpha2_to_alpha3= {'AF': 'AFG', 'AX': 'ALA', 'AL': 'ALB', 'DZ': 'DZA', 'AS':
 
 # iso_alpha2_to_alpha3=load_iso()
 
+shapefile_path = '.devcontainer/WB_countries_Admin0_10m.shp'
+world = gpd.read_file(shapefile_path)
+
+
 def dist_calc(coord1, coord2):
     '''Funtion to compute Geodesic Distance Between two coordinates'''
     dist = geopy.distance.geodesic(coord1, coord2).km
     return dist
-
-shapefile_path = r"C:\Users\simra\Downloads\python_scripts\shp_files\WB_countries_Admin0_10m.shp"
-world = gpd.read_file(shapefile_path)
 
 def geo_id_finder(lat, lon, geo_table_):   
     coordinates = lat,lon
