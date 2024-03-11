@@ -33,7 +33,7 @@ import requests
 config = configparser.ConfigParser()
 
 
-image_path = r"images/mynzo_logo.png"
+image_path = r"mynzo_logo.png"
 
 st.set_page_config(layout="wide", page_title="Workshop Analytics Dashboard",page_icon="🧊",)
 
