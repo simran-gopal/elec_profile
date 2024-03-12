@@ -18,7 +18,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import pymongo
+# import pymongo
 import plotly
 import json
 from PIL import Image
