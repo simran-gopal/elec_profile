@@ -32,7 +32,8 @@ from streamlit_float import *
 import requests
 config = configparser.ConfigParser()
 
-
+if os.path.exists('requirements.txt'):
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
 image_path = r"images/mynzo_logo.png"
 
 st.set_page_config(layout="wide", page_title="Workshop Analytics Dashboard",page_icon="🧊",)
