@@ -28,7 +28,7 @@ import io
 import matplotlib.colors
 import streamlit.components.v1 as components
 from streamlit import session_state as ss
-from streamlit_float import *
+# from streamlit_float import *
 import requests
 config = configparser.ConfigParser()
 
