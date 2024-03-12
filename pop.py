@@ -33,10 +33,9 @@ import requests
 config = configparser.ConfigParser()
 
 
-image_path = r"mynzo_logo.png"
+image_path = r"images/mynzo_logo.png"
 
 st.set_page_config(layout="wide", page_title="Workshop Analytics Dashboard",page_icon="🧊",)
-
 float_init()
 
 # Declares session variables.
@@ -97,7 +96,8 @@ st.markdown("""
         }
            .block-container {
                 padding-top: 0.5rem;
-                padding-bottom: 10rem;}
+                padding-bottom: 10rem;
+                margin-top: -70px;}
            .css-1544g2n.e1fqkh3o4 {
                 margin-top: -50px;}
             div.row-widget.stRadio > div {
@@ -621,75 +621,69 @@ def workshop_analytics(all_quizzes):
     css_start+workshop_emails[['name', 'for_2030']].round(2).sort_values(by='for_2030', ascending=True).rename(columns={'name':'Name', 'for_2030':'MQI'})[:10].fillna(0).style.set_properties(subset=['MQI'], **{'text-align': 'center'}).background_gradient(cmap=cmap, axis=0).format({'MQI':'{:.0f}'}).hide(axis="index").to_html().replace(' border="1" class="dataframe"','').replace(' style="text-align: right;"','')+css_end,height=css_table_height)
 
 
-def main():
-    global primary_font_color
-    primary_font_color ='#858585'
-    # Creates a trigger to show a dialog box.
-    dialog_container = float_dialog(
-        not ss.is_login #,  # If login is false dialog will be displayed.
-        # css='padding-top: 5px;'  # Beautify the float diablog box.
-    )
+global primary_font_color
+primary_font_color ='#858585'
+dialog_container = float_dialog(
+    not ss.is_login  # If login is false dialog will be displayed.
+    # ,css='padding-top: 5px;'  # Beautify the float diablog box.
+)
 
-    # Shows the dialog container.
-    with dialog_container:
-        def update_login_status():
-            """A callback from OK button on this dialog box."""
-            if ss.password == 'ppp':
-                ss.is_login = True
-            else:
-                ss.err_msg = 'Incorrect username/password'
+# Shows the dialog container.
+with dialog_container:
+    def update_login_status():
+        """A callback from OK button on this dialog box."""
+        if ss.password == 'mynzo2023':
+            ss.is_login = True
+        else:
+            ss.err_msg = 'Incorrect username/password'
 
-        st.markdown("## :blue[Login]")
-        st.text_input('Password', type='password', key='password')
-        st.button("OK", on_click=update_login_status)
-        msg = st.empty()
+    st.markdown("## :blue[Login]")
+    st.markdown("<style>h2 {padding: 0;}</style>", unsafe_allow_html=True)
 
-    if ss.err_msg:
-        msg.error(ss.err_msg)
+    st.text_input('Password', type='password', key='password')
+    st.button("OK", on_click=update_login_status)
+    msg = st.empty()
 
-    if ss.is_login:
-        primary_font_color ='#858585'
-        seques_plan_new = pd.DataFrame()
-        # st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Enter Dashboard password</h5>", unsafe_allow_html=True)
-        # password = st.sidebar.text_input('enter pass', label_visibility = 'collapsed', type="password")
-        # if password == 'mynzo2023':
-        try:
-            mynzo_db_read = pymysql.connect(host=sql_hostname, user=sql_username,
-                                   passwd=sql_password, db=sql_main_database)
-            live_workshops = pd.read_sql_query('''select id, name from workshop where is_live=1;''', mynzo_db_read)
+if ss.err_msg:
+    msg.error(ss.err_msg)
 
-            mynzo_db_read.close()
+if ss.is_login:
+    seques_plan_new = pd.DataFrame()
+    # st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Enter Dashboard password</h5>", unsafe_allow_html=True)
+    # password = st.sidebar.text_input('enter pass', label_visibility = 'collapsed', type="password")
+    # if password == 'mynzo2023':
+    try:
+        mynzo_db_read = pymysql.connect(host=sql_hostname, user=sql_username,
+                               passwd=sql_password, db=sql_main_database)
+        live_workshops = pd.read_sql_query('''select id, name from workshop where is_live=1;''', mynzo_db_read)
 
-            if live_workshops.shape[0]>0:
-                st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Choose Workshop</h5>", unsafe_allow_html=True)
-                global workshop_choice
-                workshop_choice = st.sidebar.radio('select Workshop', [x for x in live_workshops.name], label_visibility ='collapsed' ) 
-                global choice
-                choice = live_workshops[live_workshops.name == workshop_choice].id.item()
-                all_quizzes = quiz_list(quiz_list_url, choice)
+        mynzo_db_read.close()
 
-                st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Choose Currency</h5>", unsafe_allow_html=True)
-                global currency_choice
-                currency_choice = st.sidebar.radio('Choose Currency', ['USD ($)', 'INR (₹)'], label_visibility ='collapsed' )
+        if live_workshops.shape[0]>0:
+            st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Choose Workshop</h5>", unsafe_allow_html=True)
+            global workshop_choice
+            workshop_choice = st.sidebar.radio('select Workshop', [x for x in live_workshops.name], label_visibility ='collapsed' ) 
+            global choice
+            choice = live_workshops[live_workshops.name == workshop_choice].id.item()
+            all_quizzes = quiz_list(quiz_list_url, choice)
 
-                st.sidebar.markdown(f"<p style='text-align: center; padding-top:-5px; color: {primary_font_color}; font-family: Nunito;'><ins><i>App will show all analytics related to Mynzo Workshop {live_workshops[live_workshops.id == choice].name.item()}</i></ins></p>", unsafe_allow_html=True)
-                workshop_analytics(all_quizzes)
+            st.sidebar.markdown(f"<h5 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Choose Currency</h5>", unsafe_allow_html=True)
+            global currency_choice
+            currency_choice = st.sidebar.radio('Choose Currency', ['USD ($)', 'INR (₹)'], label_visibility ='collapsed' )
 
-                if 'date_key' not in st.session_state:
-                    st.session_state['date_key'] = pd.Timestamp.utcnow()
+            st.sidebar.markdown(f"<p style='text-align: center; padding-top:-5px; color: {primary_font_color}; font-family: Nunito;'><ins><i>App will show all analytics related to Mynzo Workshop {live_workshops[live_workshops.id == choice].name.item()}</i></ins></p>", unsafe_allow_html=True)
+            workshop_analytics(all_quizzes)
 
+            if 'date_key' not in st.session_state:
                 st.session_state['date_key'] = pd.Timestamp.utcnow()
-                sidebar_comp = st.sidebar
-                with sidebar_comp:
-                    st.components.v1.html(html_time_reset.replace('last_reload_time', str(st.session_state['date_key'].timestamp() * 1000)).replace('current_time',"new Date().getTime()"), height=50)
 
-            else:
-                st.sidebar.markdown(f"<h7 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>No live workshop available currently</h7>", unsafe_allow_html=True)
-        except:
-                st.sidebar.markdown(f"<h3 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>🙂 Please refresh the Page</h3>", unsafe_allow_html=True)
+            st.session_state['date_key'] = pd.Timestamp.utcnow()
+            sidebar_comp = st.sidebar
+            with sidebar_comp:
+                st.components.v1.html(html_time_reset.replace('last_reload_time', str(st.session_state['date_key'].timestamp() * 1000)).replace('current_time',"new Date().getTime()"), height=50)
 
         else:
-            st.sidebar.markdown(f"<h7 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>Please enter correct password</h7>", unsafe_allow_html=True)
-
-if __name__ == '__main__':
-    main()
+            st.sidebar.markdown(f"<h7 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>No live workshop available currently</h7>", unsafe_allow_html=True)
+    except:
+        st.sidebar.markdown(f"<h3 style='text-align: left; color: {primary_font_color}; font-family: Nunito;'>🙂 Please refresh the Page</h3>", unsafe_allow_html=True)
+                
